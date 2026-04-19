@@ -22,18 +22,18 @@
 
   // ─── Pixel Helpers ─────────────────────────────
   function getEffectivePPI() {
-    // Use devicePixelRatio to adjust
-    const ratio = window.devicePixelRatio || 1;
-    // CSS pixels PPI = physical PPI / devicePixelRatio
-    return vrState.ppi / ratio;
+    // Standard CSS mapping: 96 pixels per inch. Modern browsers use this
+    // to map logical CSS pixels to physical real-world dimensions.
+    return 96;
   }
 
   function cmToPx(cm) {
-    return cm * (getEffectivePPI() / 2.54);
+    // 1 inch = 96px, 1 inch = 2.54 cm
+    return cm * (96 / 2.54);
   }
 
   function mmToPx(mm) {
-    return mm * (getEffectivePPI() / 25.4);
+    return mm * (96 / 25.4);
   }
 
   // ─── Draw Lines ────────────────────────────────

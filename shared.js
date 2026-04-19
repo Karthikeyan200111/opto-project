@@ -58,16 +58,14 @@ function prismToShift(prism) {
   return (prism - VR_CONFIG.formula.c) / VR_CONFIG.formula.m;
 }
 
-/** Convert cm to CSS pixels using PPI */
-function cmToPixels(cm, ppi) {
-  ppi = ppi || VR_CONFIG.device.ppi;
-  return cm * (ppi / 2.54);
+/** Convert cm to CSS pixels using standard web 96 DPI */
+function cmToPixels(cm) {
+  return cm * (96 / 2.54);
 }
 
-/** Convert mm to CSS pixels */
-function mmToPixels(mm, ppi) {
-  ppi = ppi || VR_CONFIG.device.ppi;
-  return mm * (ppi / 25.4);
+/** Convert mm to CSS pixels using standard web 96 DPI */
+function mmToPixels(mm) {
+  return mm * (96 / 25.4);
 }
 
 /** Generate a random 6-char room code */
