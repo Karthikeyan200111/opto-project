@@ -171,7 +171,17 @@
     $('roomCode').textContent = vrState.roomCode;
 
     const peerId = 'optovr-' + vrState.roomCode.toLowerCase();
-    vrState.peer = new Peer(peerId, { debug: 0 });
+    const peerOptions = {
+      debug: 1,
+      config: {
+        iceServers: [
+          { urls: 'stun:stun.l.google.com:19302' },
+          { urls: 'stun:stun1.l.google.com:19302' },
+          { urls: 'stun:stun2.l.google.com:19302' }
+        ]
+      }
+    };
+    vrState.peer = new Peer(peerId, peerOptions);
 
     vrState.peer.on('open', function () {
       console.log('[VR] Peer ready, ID:', peerId);

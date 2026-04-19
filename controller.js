@@ -37,7 +37,17 @@
     $('btnConnect').disabled = true;
 
     const myId = 'optoctrl-' + Date.now();
-    ctrl.peer = new Peer(myId, { debug: 0 });
+    const peerOptions = {
+      debug: 1,
+      config: {
+        iceServers: [
+          { urls: 'stun:stun.l.google.com:19302' },
+          { urls: 'stun:stun1.l.google.com:19302' },
+          { urls: 'stun:stun2.l.google.com:19302' }
+        ]
+      }
+    };
+    ctrl.peer = new Peer(myId, peerOptions);
 
     ctrl.peer.on('open', function () {
       const targetId = 'optovr-' + code.toLowerCase();
