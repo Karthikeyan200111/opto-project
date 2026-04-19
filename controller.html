@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="VR Fusional Vergence — Controller for Doctor">
+  <title>OptoMeasure — Controller</title>
+  <link rel="stylesheet" href="controller.css">
+</head>
+<body>
+
+  <!-- ═══ Header ═══ -->
+  <header class="app-header">
+    <div class="app-logo">
+      <div class="icon">🎮</div>
+      <h1>Controller</h1>
+    </div>
+    <div class="header-actions">
+      <div class="conn-badge" id="connBadge">
+        <span class="conn-dot" id="connDot"></span>
+        <span id="connText">Disconnected</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══ Connection Section ═══ -->
+  <section class="connect-section" id="connectSection">
+    <div class="connect-form">
+      <h2>🔗 Connect to VR Device</h2>
+      <p>Enter the Room Code shown on the VR phone:</p>
+      <div class="code-input-row">
+        <input type="text" id="inputRoomCode" class="code-input"
+               maxlength="6" placeholder="XXXXXX" autocomplete="off"
+               spellcheck="false" autocapitalize="characters">
+        <button class="btn-connect" id="btnConnect">Connect</button>
+      </div>
+      <p class="connect-hint" id="connectHint"></p>
+    </div>
+  </section>
+
+  <!-- ═══ Main Controls (shown after connection) ═══ -->
+  <main class="main-controls" id="mainControls">
+
+    <!-- Mode Selector -->
+    <div class="mode-selector">
+      <button class="mode-btn active" id="btnBO" data-mode="BO">
+        <span class="mode-icon">◀▶</span>
+        <span>Base-Out</span>
+        <span class="mode-sub">Convergence</span>
+      </button>
+      <button class="mode-btn" id="btnBI" data-mode="BI">
+        <span class="mode-icon">▶◀</span>
+        <span>Base-In</span>
+        <span class="mode-sub">Divergence</span>
+      </button>
+    </div>
+
+    <!-- Prism Display -->
+    <div class="prism-card">
+      <div class="prism-label">PRISM DIOPTERS</div>
+      <div class="prism-main">
+        <span class="prism-value" id="prismValue">0</span>
+        <span class="prism-unit">Δ</span>
+      </div>
+      <div class="prism-sub">
+        Step <span id="stepNum">0</span> / 6 &nbsp;|&nbsp;
+        Shift: <span id="shiftValue">0.000</span> cm
+      </div>
+    </div>
+
+    <!-- Step Table -->
+    <div class="step-table">
+      <div class="step-row header">
+        <span>Step</span><span>Shift (cm)</span><span>Prism Δ</span>
+      </div>
+      <div class="step-row" data-step="1"><span>1</span><span>0.075</span><span>8</span></div>
+      <div class="step-row" data-step="2"><span>2</span><span>0.15</span><span>15</span></div>
+      <div class="step-row" data-step="3"><span>3</span><span>0.22</span><span>20</span></div>
+      <div class="step-row" data-step="4"><span>4</span><span>0.27</span><span>24</span></div>
+      <div class="step-row" data-step="5"><span>5</span><span>0.35</span><span>30</span></div>
+      <div class="step-row" data-step="6"><span>6</span><span>0.45</span><span>38</span></div>
+    </div>
+
+    <!-- +/− Buttons -->
+    <div class="move-controls">
+      <button class="btn-move btn-minus" id="btnMinus" title="Previous step (−)">−</button>
+      <button class="btn-move btn-reset" id="btnReset" title="Reset">↺</button>
+      <button class="btn-move btn-plus" id="btnPlus" title="Next step (+)">+</button>
+    </div>
+
+    <!-- IPD Slider -->
+    <div class="ipd-section">
+      <label class="ipd-label">
+        IPD: <span id="ipdValue">60</span> mm
+      </label>
+      <input type="range" id="ipdSlider" min="56" max="65" value="60" step="1" class="ipd-slider">
+    </div>
+
+    <!-- Results / Recording -->
+    <div class="results-section">
+      <h3>📝 Test Results</h3>
+      <div class="result-row">
+        <label>Break Point:</label>
+        <button class="btn-record" id="btnBreak">Record Break</button>
+        <span class="result-val" id="breakVal">—</span>
+      </div>
+      <div class="result-row">
+        <label>Recovery Point:</label>
+        <button class="btn-record" id="btnRecovery">Record Recovery</button>
+        <span class="result-val" id="recoveryVal">—</span>
+      </div>
+      <div class="result-row">
+        <button class="btn-clear" id="btnClearResults">Clear Results</button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <script src="shared.js"></script>
+  <script src="controller.js"></script>
+</body>
+</html>
