@@ -29,9 +29,9 @@ const VR_CONFIG = {
   dotSizePx: 10,        // center dot diameter
 
   // IPD
-  defaultIPD: 60,  // mm
+  defaultIPD: 64,  // mm
   minIPD: 56,
-  maxIPD: 65,
+  maxIPD: 70,
 
   // Formula coefficients: y = mx + c
   formula: { m: 80, c: 2 },

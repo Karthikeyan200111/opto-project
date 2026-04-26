@@ -257,9 +257,22 @@
     });
 
     // Tap to go fullscreen
-    document.addEventListener('click', function () {
+    document.addEventListener('click', function (e) {
+      if (e.target.closest('.btn-copy')) return; // let copy button work
       if (vrState.connected) requestFullscreen();
     });
+
+    if ($('btnCopy')) {
+      $('btnCopy').addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(vrState.roomCode);
+          $('btnCopy').textContent = '✅';
+          setTimeout(() => $('btnCopy').textContent = '📋', 2000);
+        } catch (err) {
+          console.error('Failed to copy', err);
+        }
+      });
+    }
   }
 
   if (document.readyState === 'loading') {

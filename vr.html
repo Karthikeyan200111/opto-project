@@ -15,7 +15,10 @@
       <div class="connect-icon">🥽</div>
       <h1>VR Patient View</h1>
       <p>Enter this code on the Controller phone to connect:</p>
-      <div class="room-code" id="roomCode">------</div>
+      <div class="code-container">
+        <div class="room-code" id="roomCode">------</div>
+        <button class="btn-copy" id="btnCopy" title="Copy Code">📋</button>
+      </div>
       <div class="connect-status" id="connectStatus">
         <span class="status-dot waiting"></span>
         Waiting for controller...
@@ -34,6 +37,8 @@
       </div>
     </div>
 
+    <!-- Center Divider -->
+    <div class="vr-divider"></div>
 
     <!-- Right Eye (Vertical Line) -->
     <div class="eye-view" id="rightEye">

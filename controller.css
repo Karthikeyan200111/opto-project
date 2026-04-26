@@ -93,10 +93,14 @@ body {
   font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 20px;
 }
 .code-input-row {
-  display: flex; gap: 10px; margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px; margin-bottom: 12px;
 }
 .code-input {
-  flex: 1; padding: 14px 16px;
+  flex: 1;
+  max-width: 65%;
+  padding: 14px 16px;
   border-radius: var(--radius-sm);
   border: 2px solid var(--border);
   background: var(--surface);
