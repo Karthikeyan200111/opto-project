@@ -74,6 +74,7 @@ body {
   gap: 12px;
   margin-bottom: 24px;
 }
+
 .room-code {
   font-family: 'JetBrains Mono', monospace;
   font-size: 2.5rem;
@@ -85,6 +86,7 @@ body {
   border-radius: 12px;
   padding: 16px 24px;
 }
+
 .btn-copy {
   background: rgba(255, 255, 255, 0.1);
   border: 2px solid rgba(255, 255, 255, 0.2);
@@ -96,6 +98,7 @@ body {
   cursor: pointer;
   transition: all 0.2s ease;
 }
+
 .btn-copy:hover {
   background: rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.4);
@@ -162,7 +165,7 @@ body {
 
 .vr-divider {
   width: 4px;
-  background: #000000;
+  background: #ffffff;
   height: 100%;
   z-index: 10;
 }
