@@ -168,7 +168,7 @@ body {
 
 .vr-divider {
   width: 1px;
-  background: #0000ff; /* Blue thin line */
+  background: #ffffff; /* Blue thin line */
   height: 100%;
   z-index: 10;
 }
