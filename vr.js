@@ -28,11 +28,12 @@
   }
 
   function cmToPx(cm) {
-    // 1 inch = 96px, 1 inch = 2.54 cm
+    // Standard CSS: 1cm = 96px / 2.54
     return cm * (96 / 2.54);
   }
 
   function mmToPx(mm) {
+    // 1mm = 96px / 25.4
     return mm * (96 / 25.4);
   }
 
@@ -105,27 +106,21 @@
   // ─── Apply IPD ─────────────────────────────────
   function applyIPD() {
     const halfIPDpx = mmToPx(vrState.ipd) / 2;
-    const screenCenterPx = window.innerWidth / 2;
-    const halfWidth = screenCenterPx; // each eye view is half screen
+    // The "base" IPD of our CSS layout is 80mm (3.5cm from each edge of 15cm)
+    const baseHalfIPDpx = cmToPx(4.0); // (15cm/2 - 3.5cm) = 4.0cm from center
+    
+    const offsetPx = halfIPDpx - baseHalfIPDpx;
 
-    // Offset each eye-view content toward/away from divider
-    // Left eye: shift content right (toward divider)
-    // Right eye: shift content left (toward divider)
-    const leftEye = $('leftEye');
-    const rightEye = $('rightEye');
+    const leftContent = $('leftContent');
+    const rightContent = $('rightContent');
 
-    // The content should be positioned so that the dots are IPD apart
-    // Each half is halfWidth wide. The dot should be at halfIPDpx from screen center.
-    // So dot should be at: halfWidth - (halfWidth - halfIPDpx) from left edge of each half
-    // = halfIPDpx from the divider side
-    const offsetFromCenter = halfWidth / 2; // default center of each half
-    const desiredPos = halfWidth - halfIPDpx; // distance from outer edge
-    const nudge = desiredPos - offsetFromCenter;
-
-    leftEye.style.paddingRight = Math.max(0, -nudge * 2) + 'px';
-    leftEye.style.paddingLeft = Math.max(0, nudge * 2) + 'px';
-    rightEye.style.paddingLeft = Math.max(0, -nudge * 2) + 'px';
-    rightEye.style.paddingRight = Math.max(0, nudge * 2) + 'px';
+    // Nudge the content from its CSS base position
+    // Left eye: positive offset moves it right (toward divider)
+    // Right eye: positive offset moves it left (toward divider)
+    // We'll use a data attribute or a secondary container to avoid conflict with shift transform
+    // Actually, we can just set the left/right styles directly
+    leftContent.style.marginLeft = (-offsetPx) + 'px';
+    rightContent.style.marginRight = (-offsetPx) + 'px';
   }
 
   // ─── Handle Commands ───────────────────────────

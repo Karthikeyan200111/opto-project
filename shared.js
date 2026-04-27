@@ -12,26 +12,26 @@ const VR_CONFIG = {
   objectDistance: 10,   // cm
   imageDistance: 40,    // cm
 
-  // Vivo 1938 screen (portrait dimensions)
+  // Vivo Y3 screen (display area: 15cm x 6.8cm)
   device: {
-    name: 'Vivo 1938',
-    heightInch: 6.27,
-    widthInch: 2.94,
-    // Landscape: width=6.27", height=2.94"
-    landscapeWidthInch: 6.27,
-    landscapeHeightInch: 2.94,
-    ppi: 243,  // approximate PPI
+    name: 'Vivo Y3',
+    heightInch: 5.90, // 15cm
+    widthInch: 2.68,  // 6.8cm
+    // Landscape: width=15cm, height=6.8cm
+    landscapeWidthInch: 5.90,
+    landscapeHeightInch: 2.68,
+    ppi: 400,  // Standard for high-res mobile
   },
 
   // Line dimensions
-  lineLengthCm: 3,      // cm per side (3+3 = 6cm total)
+  lineLengthCm: 3,      // 3cm each side (total 6cm)
   lineThicknessPx: 4,   // thick black line
   dotSizePx: 10,        // center dot diameter
 
   // IPD
-  defaultIPD: 64,  // mm
-  minIPD: 56,
-  maxIPD: 70,
+  defaultIPD: 80,  // mm (Matches 3.5cm from edges of 15cm screen)
+  minIPD: 50,
+  maxIPD: 90,
 
   // Formula coefficients: y = mx + c
   formula: { m: 80, c: 2 },
