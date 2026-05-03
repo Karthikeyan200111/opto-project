@@ -34,7 +34,8 @@
     return (mm / 10) * getDevicePxPerCm().x;
   }
 
-  // ─── Compute & Apply Layout (CSS Custom Properties) ──
+  // ─── Compute & Apply Layout ────────────────────
+  // ─── Compute & Apply Layout ────────────────────
   function computeLayout() {
     const L = VR_CONFIG.layout;
     const pxPerCm = getDevicePxPerCm();
@@ -42,22 +43,17 @@
     const containerW = L.containerWidthCm * pxPerCm.x;   // 15cm in device px
     const containerH = L.containerHeightCm * pxPerCm.y;   // 6.8cm in device px
     const eyeW       = L.eyeWidthCm * pxPerCm.x;          // 7.5cm in device px
-    const dotTop      = L.dotFromTopCm * pxPerCm.y;        // 3.4cm from top in device px
-    const dotFromEdge = L.dotFromEdgeCm * pxPerCm.x;       // 3.75cm from edge in device px
 
     // Set CSS custom properties on the container
     const container = $('vrContainer');
     container.style.setProperty('--container-w', containerW + 'px');
     container.style.setProperty('--container-h', containerH + 'px');
     container.style.setProperty('--eye-w', eyeW + 'px');
-    container.style.setProperty('--dot-top', dotTop + 'px');
-    container.style.setProperty('--dot-from-edge', dotFromEdge + 'px');
 
-    console.log('[VR] Layout computed — pxPerCm:', pxPerCm,
+    console.log('[VR] Layout (CSS-centred) — pxPerCm:', pxPerCm,
       '| container:', containerW.toFixed(1) + 'x' + containerH.toFixed(1) + 'px',
       '| eyeW:', eyeW.toFixed(1) + 'px',
-      '| dotTop:', dotTop.toFixed(1) + 'px',
-      '| dotFromEdge:', dotFromEdge.toFixed(1) + 'px');
+      '| viewport:', window.innerWidth + 'x' + window.innerHeight + 'px');
   }
 
   // ─── Draw Lines ────────────────────────────────
@@ -121,20 +117,26 @@
     }
   }
 
-  // ─── Apply IPD ─────────────────────────────────
+  // ─── Apply IPD ─────────────────────────────
   function applyIPD() {
     const halfIPDpx = mmToPx(vrState.ipd) / 2;
-    // Base distance from divider = eyeWidth - dotFromEdge
-    // = 7.5cm - 3.75cm = 3.75cm per side → base IPD = 7.5cm = 75mm
-    const baseDistFromDivider = VR_CONFIG.layout.eyeWidthCm - VR_CONFIG.layout.dotFromEdgeCm;
-    const baseHalfIPDpx = cmToPx(baseDistFromDivider);
 
+    // The dot starts at the CSS centre of each eye-view half.
+    // Base distance from divider to dot = eyeView width / 2.
+    const L = VR_CONFIG.layout;
+    const pxPerCm = getDevicePxPerCm();
+    const eyeWPx = L.eyeWidthCm * pxPerCm.x;
+    const baseHalfIPDpx = eyeWPx / 2;   // centre of this half = eyeW/2 from the divider
+
+    // Positive offsetPx → dot moves toward divider (inward); negative → outward
     const offsetPx = halfIPDpx - baseHalfIPDpx;
 
-    const leftContent = $('leftContent');
+    const leftContent  = $('leftContent');
     const rightContent = $('rightContent');
 
-    leftContent.style.marginLeft = (-offsetPx) + 'px';
+    // Left dot: shift inward (toward divider) when IPD is smaller than baseline
+    leftContent.style.marginLeft  = (-offsetPx) + 'px';
+    // Right dot: mirror
     rightContent.style.marginRight = (-offsetPx) + 'px';
   }
 

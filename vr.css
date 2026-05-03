@@ -144,7 +144,16 @@ body {
 }
 
 /* ── VR Split Screen ───────────────────────────── */
-/* All dimensions are set via CSS custom properties computed from actual device DPI in vr.js */
+/*
+  Layout strategy — pure CSS, no cm/px measurements for base position:
+  1. .vr-container fills the full viewport (100vw × 100vh)
+  2. .vr-divider splits it into two equal halves
+  3. Each .eye-view is flex:1 → exactly 50% of the container width
+  4. .eye-content is absolutely centred inside its half:
+       left:50%; top:50%; transform:translate(-50%,-50%)
+     so the dot & lines are always at the geometric centre of that half.
+  5. JS applyShift() and applyIPD() apply translateX() offsets on top.
+*/
 .vr-container {
   width: var(--container-w);
   height: var(--container-h);
@@ -171,32 +180,20 @@ body {
 .vr-divider {
   width: 2px;
   background: #ffffff;
-  /* Blue thin divider line */
   height: 100%;
   z-index: 10;
   flex-shrink: 0;
 }
 
+/* Centre of each screen half — works for any screen size */
 .eye-content {
   position: absolute;
-  top: var(--dot-top);
-  /* 3.4cm from top, computed in actual device pixels */
+  left: 50%;              /* horizontal centre of this half */
+  top: 50%;               /* vertical centre of this half  */
+  transform: translate(-50%, -50%);
   width: 0;
   height: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-#leftEye .eye-content {
-  left: var(--dot-from-edge);
-  /* 3.75cm from left edge, in device pixels */
-}
-
-#rightEye .eye-content {
-  right: var(--dot-from-edge);
-  /* 3.75cm from right edge, in device pixels */
 }
 
 
