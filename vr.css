@@ -154,28 +154,28 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  /* box-shadow: 0 0 20px rgba(0,0,0,0.1); */
   overflow: hidden;
 }
 
 .eye-view {
   width: 7.5cm;
-  height: 100%;
+  height: 6.8cm;
   position: relative;
   overflow: hidden;
   background: #ffffff;
 }
 
 .vr-divider {
-  width: 1px;
-  background: #ffffff; /* Blue thin line */
+  width: 2px;
+  background: #2563eb; /* Blue thin divider line */
   height: 100%;
   z-index: 10;
+  flex-shrink: 0;
 }
 
 .eye-content {
   position: absolute;
-  top: 3.4cm; /* Vertical center */
+  top: 3.4cm; /* 3.4cm from top (and 3.4cm from bottom in 6.8cm height = vertically centered) */
   width: 0;
   height: 0;
   display: flex;
@@ -185,11 +185,11 @@ body {
 }
 
 #leftEye .eye-content {
-  left: 3.5cm;
+  left: 3.75cm; /* 3.75cm from left edge of 7cm half */
 }
 
 #rightEye .eye-content {
-  right: 3.5cm;
+  right: 3.75cm; /* 3.75cm from right edge of 7cm half */
 }
 
 

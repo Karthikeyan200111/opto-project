@@ -106,8 +106,9 @@
   // ─── Apply IPD ─────────────────────────────────
   function applyIPD() {
     const halfIPDpx = mmToPx(vrState.ipd) / 2;
-    // The "base" IPD of our CSS layout is 80mm (3.5cm from each edge of 15cm)
-    const baseHalfIPDpx = cmToPx(4.0); // (15cm/2 - 3.5cm) = 4.0cm from center
+    // The "base" IPD of our CSS layout is 75mm (3.75cm from each edge of 7.5cm half)
+    // Distance from divider = 7.5cm - 3.75cm = 3.75cm per side → base IPD = 7.5cm = 75mm
+    const baseHalfIPDpx = cmToPx(3.75); // (7.5cm - 3.75cm) = 3.75cm from center divider
     
     const offsetPx = halfIPDpx - baseHalfIPDpx;
 
@@ -117,8 +118,6 @@
     // Nudge the content from its CSS base position
     // Left eye: positive offset moves it right (toward divider)
     // Right eye: positive offset moves it left (toward divider)
-    // We'll use a data attribute or a secondary container to avoid conflict with shift transform
-    // Actually, we can just set the left/right styles directly
     leftContent.style.marginLeft = (-offsetPx) + 'px';
     rightContent.style.marginRight = (-offsetPx) + 'px';
   }
