@@ -40,7 +40,7 @@ const VR_CONFIG = {
   dotSizePx: 10,        // center dot diameter
 
   // IPD
-  defaultIPD: 80,  // mm (Matches 3.5cm from edges of 15cm screen)
+  defaultIPD: 75,  // mm (Matches 3.75cm from edges → 3.75cm from divider × 2 = 75mm)
   minIPD: 50,
   maxIPD: 90,
 
