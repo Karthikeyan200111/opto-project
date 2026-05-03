@@ -170,7 +170,8 @@ body {
 
 .vr-divider {
   width: 2px;
-  background: #2563eb; /* Blue thin divider line */
+  background: #ffffff;
+  /* Blue thin divider line */
   height: 100%;
   z-index: 10;
   flex-shrink: 0;
@@ -178,7 +179,8 @@ body {
 
 .eye-content {
   position: absolute;
-  top: var(--dot-top); /* 3.4cm from top, computed in actual device pixels */
+  top: var(--dot-top);
+  /* 3.4cm from top, computed in actual device pixels */
   width: 0;
   height: 0;
   display: flex;
@@ -188,11 +190,13 @@ body {
 }
 
 #leftEye .eye-content {
-  left: var(--dot-from-edge); /* 3.75cm from left edge, in device pixels */
+  left: var(--dot-from-edge);
+  /* 3.75cm from left edge, in device pixels */
 }
 
 #rightEye .eye-content {
-  right: var(--dot-from-edge); /* 3.75cm from right edge, in device pixels */
+  right: var(--dot-from-edge);
+  /* 3.75cm from right edge, in device pixels */
 }
 
 
