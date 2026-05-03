@@ -144,9 +144,10 @@ body {
 }
 
 /* ── VR Split Screen ───────────────────────────── */
+/* All dimensions are set via CSS custom properties computed from actual device DPI in vr.js */
 .vr-container {
-  width: 15cm;
-  height: 6.8cm;
+  width: var(--container-w);
+  height: var(--container-h);
   display: flex;
   flex-direction: row;
   background: #ffffff;
@@ -156,12 +157,12 @@ body {
   transform: translate(-50%, -50%);
   overflow: hidden;
   border: black;
-    border-style: dashed;
+  border-style: dashed;
 }
 
 .eye-view {
-  width: 7.5cm;
-  height: 6.8cm;
+  width: var(--eye-w);
+  height: var(--container-h);
   position: relative;
   overflow: hidden;
   background: #ffffff;
@@ -177,7 +178,7 @@ body {
 
 .eye-content {
   position: absolute;
-  top: 3.4cm; /* 3.4cm from top (and 3.4cm from bottom in 6.8cm height = vertically centered) */
+  top: var(--dot-top); /* 3.4cm from top, computed in actual device pixels */
   width: 0;
   height: 0;
   display: flex;
@@ -187,11 +188,11 @@ body {
 }
 
 #leftEye .eye-content {
-  left: 3.75cm; /* 3.75cm from left edge of 7cm half */
+  left: var(--dot-from-edge); /* 3.75cm from left edge, in device pixels */
 }
 
 #rightEye .eye-content {
-  right: 3.75cm; /* 3.75cm from right edge of 7cm half */
+  right: var(--dot-from-edge); /* 3.75cm from right edge, in device pixels */
 }
 
 

@@ -12,15 +12,26 @@ const VR_CONFIG = {
   objectDistance: 10,   // cm
   imageDistance: 40,    // cm
 
-  // Vivo Y3 screen (display area: 15cm x 6.8cm)
+  // Vivo Y3 screen — known physical display area
   device: {
     name: 'Vivo Y3',
-    heightInch: 5.90, // 15cm
-    widthInch: 2.68,  // 6.8cm
-    // Landscape: width=15cm, height=6.8cm
-    landscapeWidthInch: 5.90,
-    landscapeHeightInch: 2.68,
-    ppi: 400,  // Standard for high-res mobile
+    // Physical screen dimensions (measured)
+    physicalWidthCm: 15,    // landscape width in cm
+    physicalHeightCm: 6.8,  // landscape height in cm
+    // Screen resolution (physical pixels)
+    resolutionW: 1544,      // landscape width in physical pixels
+    resolutionH: 720,       // landscape height in physical pixels
+    ppi: 400,
+  },
+
+  // Layout measurements in cm (physical)
+  layout: {
+    containerWidthCm: 15,     // total VR container width
+    containerHeightCm: 6.8,   // total VR container height
+    eyeWidthCm: 7.5,          // each eye-view half width
+    dotFromEdgeCm: 3.75,      // dot horizontal distance from outer edge
+    dotFromTopCm: 3.4,        // dot vertical distance from top (and bottom)
+    lineLengthCm: 3,          // 3cm per side of dot (total 6cm line)
   },
 
   // Line dimensions
@@ -58,14 +69,40 @@ function prismToShift(prism) {
   return (prism - VR_CONFIG.formula.c) / VR_CONFIG.formula.m;
 }
 
-/** Convert cm to CSS pixels using standard web 96 DPI */
-function cmToPixels(cm) {
-  return cm * (96 / 2.54);
+/**
+ * Get the ACTUAL CSS-pixels-per-cm for this device.
+ * Uses the known physical screen size and the screen's CSS pixel dimensions.
+ * This is far more accurate than the browser's fixed 96 DPI reference.
+ *
+ * Returns { x: pxPerCmHorizontal, y: pxPerCmVertical }
+ */
+function getDevicePxPerCm() {
+  // screen.width / screen.height give CSS pixel dimensions
+  const sw = Math.max(screen.width, screen.height);   // landscape width (CSS px)
+  const sh = Math.min(screen.width, screen.height);    // landscape height (CSS px)
+
+  const physW = VR_CONFIG.device.physicalWidthCm;      // 15 cm
+  const physH = VR_CONFIG.device.physicalHeightCm;     // 6.8 cm
+
+  return {
+    x: sw / physW,   // CSS pixels per cm (horizontal)
+    y: sh / physH,   // CSS pixels per cm (vertical)
+  };
 }
 
-/** Convert mm to CSS pixels using standard web 96 DPI */
+/** Convert cm to ACTUAL device CSS pixels (horizontal axis) */
+function cmToPixels(cm) {
+  return cm * getDevicePxPerCm().x;
+}
+
+/** Convert cm to ACTUAL device CSS pixels (vertical axis) */
+function cmToPixelsY(cm) {
+  return cm * getDevicePxPerCm().y;
+}
+
+/** Convert mm to ACTUAL device CSS pixels (horizontal axis) */
 function mmToPixels(mm) {
-  return mm * (96 / 25.4);
+  return (mm / 10) * getDevicePxPerCm().x;
 }
 
 /** Generate a random 6-char room code */

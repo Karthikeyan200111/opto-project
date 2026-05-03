@@ -20,41 +20,61 @@
   // ─── DOM ───────────────────────────────────────
   const $ = id => document.getElementById(id);
 
-  // ─── Pixel Helpers ─────────────────────────────
-  function getEffectivePPI() {
-    // Standard CSS mapping: 96 pixels per inch. Modern browsers use this
-    // to map logical CSS pixels to physical real-world dimensions.
-    return 96;
+  // ─── Pixel Helpers (actual device DPI) ──────────
+  function cmToPx(cm) {
+    // Uses actual device screen resolution / physical size (from shared.js)
+    return cm * getDevicePxPerCm().x;
   }
 
-  function cmToPx(cm) {
-    // Standard CSS: 1cm = 96px / 2.54
-    return cm * (96 / 2.54);
+  function cmToPxY(cm) {
+    return cm * getDevicePxPerCm().y;
   }
 
   function mmToPx(mm) {
-    // 1mm = 96px / 25.4
-    return mm * (96 / 25.4);
+    return (mm / 10) * getDevicePxPerCm().x;
+  }
+
+  // ─── Compute & Apply Layout (CSS Custom Properties) ──
+  function computeLayout() {
+    const L = VR_CONFIG.layout;
+    const pxPerCm = getDevicePxPerCm();
+
+    const containerW = L.containerWidthCm * pxPerCm.x;   // 15cm in device px
+    const containerH = L.containerHeightCm * pxPerCm.y;   // 6.8cm in device px
+    const eyeW       = L.eyeWidthCm * pxPerCm.x;          // 7.5cm in device px
+    const dotTop      = L.dotFromTopCm * pxPerCm.y;        // 3.4cm from top in device px
+    const dotFromEdge = L.dotFromEdgeCm * pxPerCm.x;       // 3.75cm from edge in device px
+
+    // Set CSS custom properties on the container
+    const container = $('vrContainer');
+    container.style.setProperty('--container-w', containerW + 'px');
+    container.style.setProperty('--container-h', containerH + 'px');
+    container.style.setProperty('--eye-w', eyeW + 'px');
+    container.style.setProperty('--dot-top', dotTop + 'px');
+    container.style.setProperty('--dot-from-edge', dotFromEdge + 'px');
+
+    console.log('[VR] Layout computed — pxPerCm:', pxPerCm,
+      '| container:', containerW.toFixed(1) + 'x' + containerH.toFixed(1) + 'px',
+      '| eyeW:', eyeW.toFixed(1) + 'px',
+      '| dotTop:', dotTop.toFixed(1) + 'px',
+      '| dotFromEdge:', dotFromEdge.toFixed(1) + 'px');
   }
 
   // ─── Draw Lines ────────────────────────────────
   function renderLines() {
-    const lineLenPx = cmToPx(VR_CONFIG.lineLengthCm); // 3cm per side
+    const lineLenPx = cmToPx(VR_CONFIG.layout.lineLengthCm); // 3cm per side in device px
     const thick = VR_CONFIG.lineThicknessPx;
     const dotSize = VR_CONFIG.dotSizePx;
 
     // --- Left Eye: Horizontal line ---
     const hLineLeft = $('hLineLeft');
     const hLineRight = $('hLineRight');
-    // Position relative to center of eye-view
-    // Line left: from center going left by lineLenPx
     hLineLeft.style.width = lineLenPx + 'px';
     hLineLeft.style.height = thick + 'px';
     hLineLeft.style.right = '50%';
     hLineLeft.style.left = 'auto';
     hLineLeft.style.marginRight = (dotSize / 2) + 'px';
 
-    // Line right: from center going right by lineLenPx
     hLineRight.style.width = lineLenPx + 'px';
     hLineRight.style.height = thick + 'px';
     hLineRight.style.left = '50%';
@@ -65,13 +85,13 @@
     const vLineTop = $('vLineTop');
     const vLineBottom = $('vLineBottom');
 
-    vLineTop.style.height = lineLenPx + 'px';
+    vLineTop.style.height = cmToPxY(VR_CONFIG.layout.lineLengthCm) + 'px';
     vLineTop.style.width = thick + 'px';
     vLineTop.style.bottom = '50%';
     vLineTop.style.top = 'auto';
     vLineTop.style.marginBottom = (dotSize / 2) + 'px';
 
-    vLineBottom.style.height = lineLenPx + 'px';
+    vLineBottom.style.height = cmToPxY(VR_CONFIG.layout.lineLengthCm) + 'px';
     vLineBottom.style.width = thick + 'px';
     vLineBottom.style.top = '50%';
     vLineBottom.style.bottom = 'auto';
@@ -93,11 +113,9 @@
     const rightContent = $('rightContent');
 
     if (vrState.mode === 'BO') {
-      // Base-Out (convergence): left shifts left, right shifts right
       leftContent.style.transform = 'translateX(' + (-shiftPx) + 'px)';
       rightContent.style.transform = 'translateX(' + shiftPx + 'px)';
     } else {
-      // Base-In (divergence): left shifts right, right shifts left
       leftContent.style.transform = 'translateX(' + shiftPx + 'px)';
       rightContent.style.transform = 'translateX(' + (-shiftPx) + 'px)';
     }
@@ -106,18 +124,16 @@
   // ─── Apply IPD ─────────────────────────────────
   function applyIPD() {
     const halfIPDpx = mmToPx(vrState.ipd) / 2;
-    // The "base" IPD of our CSS layout is 75mm (3.75cm from each edge of 7.5cm half)
-    // Distance from divider = 7.5cm - 3.75cm = 3.75cm per side → base IPD = 7.5cm = 75mm
-    const baseHalfIPDpx = cmToPx(3.75); // (7.5cm - 3.75cm) = 3.75cm from center divider
-    
+    // Base distance from divider = eyeWidth - dotFromEdge
+    // = 7.5cm - 3.75cm = 3.75cm per side → base IPD = 7.5cm = 75mm
+    const baseDistFromDivider = VR_CONFIG.layout.eyeWidthCm - VR_CONFIG.layout.dotFromEdgeCm;
+    const baseHalfIPDpx = cmToPx(baseDistFromDivider);
+
     const offsetPx = halfIPDpx - baseHalfIPDpx;
 
     const leftContent = $('leftContent');
     const rightContent = $('rightContent');
 
-    // Nudge the content from its CSS base position
-    // Left eye: positive offset moves it right (toward divider)
-    // Right eye: positive offset moves it left (toward divider)
     leftContent.style.marginLeft = (-offsetPx) + 'px';
     rightContent.style.marginRight = (-offsetPx) + 'px';
   }
@@ -152,6 +168,7 @@
 
       case 'ppi':
         vrState.ppi = data.value;
+        computeLayout();
         renderLines();
         applyShift();
         applyIPD();
@@ -239,12 +256,14 @@
 
   // ─── Init ──────────────────────────────────────
   function init() {
+    computeLayout();  // Set CSS vars from actual device DPI first
     renderLines();
     applyIPD();
     applyShift();
     initPeer();
 
     window.addEventListener('resize', function () {
+      computeLayout();  // Recompute on resize/orientation change
       renderLines();
       applyIPD();
       applyShift();
