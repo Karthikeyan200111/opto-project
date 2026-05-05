@@ -16,7 +16,7 @@ const VR_CONFIG = {
   device: {
     name: 'Vivo Y3',
     // Physical screen dimensions (measured)
-    physicalWidthCm: 15,    // landscape width in cm
+    physicalWidthCm: 14.6,    // landscape width in cm
     physicalHeightCm: 6.8,  // landscape height in cm
     // Screen resolution (physical pixels)
     resolutionW: 1544,      // landscape width in physical pixels
@@ -26,7 +26,7 @@ const VR_CONFIG = {
 
   // Layout measurements in cm (physical)
   layout: {
-    containerWidthCm: 15,     // total VR container width
+    containerWidthCm: 14.6,     // total VR container width
     containerHeightCm: 6.8,   // total VR container height
     eyeWidthCm: 7.5,          // each eye-view half width
     dotFromEdgeCm: 3.75,      // dot horizontal distance from outer edge
@@ -40,7 +40,7 @@ const VR_CONFIG = {
   dotSizePx: 10,        // center dot diameter
 
   // IPD
-  defaultIPD: 75,  // mm (Matches 3.75cm from edges → 3.75cm from divider × 2 = 75mm)
+  defaultIPD: 62,  // mm (Matches 3.75cm from edges → 3.75cm from divider × 2 = 75mm)
   minIPD: 50,
   maxIPD: 90,
 

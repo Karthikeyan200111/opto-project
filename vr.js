@@ -108,12 +108,15 @@
     const leftContent = $('leftContent');
     const rightContent = $('rightContent');
 
+    // Base-Out (Convergence): targets move INWARD. Left moves right (+), Right moves left (-).
+    // Base-In (Divergence): targets move OUTWARD. Left moves left (-), Right moves right (+).
+    // We preserve the CSS translate(-50%, -50%) base centering to be safe.
     if (vrState.mode === 'BO') {
-      leftContent.style.transform = 'translateX(' + (-shiftPx) + 'px)';
-      rightContent.style.transform = 'translateX(' + shiftPx + 'px)';
+      leftContent.style.transform = 'translate(calc(-50% + ' + shiftPx + 'px), -50%)';
+      rightContent.style.transform = 'translate(calc(-50% - ' + shiftPx + 'px), -50%)';
     } else {
-      leftContent.style.transform = 'translateX(' + shiftPx + 'px)';
-      rightContent.style.transform = 'translateX(' + (-shiftPx) + 'px)';
+      leftContent.style.transform = 'translate(calc(-50% - ' + shiftPx + 'px), -50%)';
+      rightContent.style.transform = 'translate(calc(-50% + ' + shiftPx + 'px), -50%)';
     }
   }
 
@@ -136,8 +139,8 @@
 
     // Left dot: shift inward (toward divider) when IPD is smaller than baseline
     leftContent.style.marginLeft  = (-offsetPx) + 'px';
-    // Right dot: mirror
-    rightContent.style.marginRight = (-offsetPx) + 'px';
+    // Right dot: mirror (use marginLeft to shift it leftward when offsetPx is negative)
+    rightContent.style.marginLeft = offsetPx + 'px';
   }
 
   // ─── Handle Commands ───────────────────────────
